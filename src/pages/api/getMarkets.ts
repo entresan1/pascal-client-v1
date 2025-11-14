@@ -2,6 +2,10 @@ import clientPromise from "@/lib/mongodb";
 
 export default async function handler(req, res) {
   try {
+    if (!clientPromise) {
+      res.status(503).json({ statusCode: 503, message: "Database not configured" });
+      return;
+    }
     const client = await clientPromise;
     const db = client.db("pascal");
 

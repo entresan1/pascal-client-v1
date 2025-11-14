@@ -8,6 +8,13 @@ import clientPromise from "@/lib/mongodb";
 // This gets called at build time
 export const getStaticPaths = async () => {
   try {
+    if (!clientPromise) {
+      // If MongoDB is not configured, return empty paths with blocking fallback
+      return {
+        paths: [],
+        fallback: 'blocking',
+      };
+    }
     const client = await clientPromise;
     const db = client.db("pascal");
 
@@ -15,15 +22,24 @@ export const getStaticPaths = async () => {
 
     return {
       paths: markets.map((market: any) => `/market/${market.publicKey}`),
-      fallback: false,
+      fallback: 'blocking',
     };
   } catch (e) {
     console.error("Error getStaticPaths", e);
+    return {
+      paths: [],
+      fallback: 'blocking',
+    };
   }
 };
 
 export const getStaticProps = async ({ params: { slug } }) => {
   try {
+    if (!clientPromise) {
+      return {
+        notFound: true,
+      };
+    }
     const client = await clientPromise;
     const db = client.db("pascal");
 
@@ -31,12 +47,21 @@ export const getStaticProps = async ({ params: { slug } }) => {
       .collection("markets")
       .find({ publicKey: slug })
       .toArray();
+    
+    if (!market || market.length === 0) {
+      return {
+        notFound: true,
+      };
+    }
+    
     return {
       props: { market: JSON.parse(JSON.stringify(market[0])) },
     };
   } catch (e) {
     console.error("Error getStaticProps", e);
-    throw Error("Failed to connect to MongoDB");
+    return {
+      notFound: true,
+    };
   }
 };
 

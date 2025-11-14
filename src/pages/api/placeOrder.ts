@@ -32,6 +32,10 @@ export default async function handler(req, res) {
       } = priceData;
       const orderAccounts = orderData.data.orderAccounts;
 
+      if (!clientPromise) {
+        res.status(503).json({ error: "Database not configured" });
+        return;
+      }
       const client = await clientPromise;
       const users = client.db("pascal").collection("users");
       // Update user collection in db

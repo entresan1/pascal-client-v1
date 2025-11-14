@@ -20,6 +20,10 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
+      if (!clientPromise) {
+        res.status(503).json({ statusCode: 503, message: "Database not configured" });
+        return;
+      }
       const program = await getProgram();
       const client = await clientPromise;
       const documents = client.db("pascal").collection("markets");

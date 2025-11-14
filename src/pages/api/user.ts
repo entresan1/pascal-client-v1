@@ -17,6 +17,10 @@ export default async function handler(req, res) {
       return;
     }
 
+    if (!clientPromise) {
+      res.status(503).json({ error: "Database not configured" });
+      return;
+    }
     const client = await clientPromise;
     const db = client.db("pascal");
 

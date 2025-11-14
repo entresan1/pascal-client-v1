@@ -94,6 +94,13 @@ const Home: NextPage = ({
 
 export async function getStaticProps() {
   try {
+    if (!clientPromise) {
+      return {
+        props: {
+          markets: [],
+        },
+      };
+    }
     const client = await clientPromise;
     const db = client.db("pascal");
     const markets = await db
@@ -111,6 +118,11 @@ export async function getStaticProps() {
     };
   } catch (e) {
     console.error("Error connecting to MongoDB \n", e);
+    return {
+      props: {
+        markets: [],
+      },
+    };
   }
 }
 

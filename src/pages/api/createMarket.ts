@@ -39,6 +39,10 @@ export default async function handler(req, res) {
       } = priceData;
 
       // Add market to db
+      if (!clientPromise) {
+        res.status(503).json({ error: "Database not configured" });
+        return;
+      }
       const client = await clientPromise;
       const markets = client.db("pascal").collection("markets");
       const market = await markets.insertOne({

@@ -1,18 +1,18 @@
 import { MongoClient } from "mongodb";
 
-if (!process.env.NEXT_PUBLIC_MONGODB_URI) {
-  throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
-}
-
 const uri = process.env.NEXT_PUBLIC_MONGODB_URI;
 const options = {};
 
-let client;
-let clientPromise: Promise<MongoClient>;
+let client: MongoClient | null = null;
+let clientPromise: Promise<MongoClient> | null = null;
 
-client = new MongoClient(uri, options);
-clientPromise = client.connect();
+// Only create connection if URI is provided
+if (uri) {
+  client = new MongoClient(uri, options);
+  clientPromise = client.connect();
+}
 
 // Export a module-scoped MongoClient promise. By doing this in a
 // separate module, the client can be shared across functions.
+// Returns null if MongoDB URI is not configured
 export default clientPromise;
