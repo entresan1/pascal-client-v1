@@ -18,11 +18,16 @@ import { clusterApiUrl } from "@solana/web3.js";
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 const WalletContextProvider = ({ children }) => {
-  // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
-  const network = WalletAdapterNetwork.Devnet;
+  // Use mainnet-beta for production
+  const network = (process.env.NEXT_PUBLIC_SOLANA_NETWORK as WalletAdapterNetwork) || WalletAdapterNetwork.Mainnet;
 
-  // Can provide a custom RPC endpoint
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  // Use custom RPC endpoint if provided, otherwise use clusterApiUrl
+  const endpoint = useMemo(() => {
+    if (process.env.NEXT_PUBLIC_NODE) {
+      return process.env.NEXT_PUBLIC_NODE;
+    }
+    return clusterApiUrl(network);
+  }, [network]);
 
   const wallets = useMemo(
     () => [

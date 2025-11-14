@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { ExternalLinkIcon, InfoOutlineIcon } from "@chakra-ui/icons";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { SOLANA_CLUSTER } from "@/utils/constants";
 
 const AddressesInfo = (props) => {
   const toast = useToast();
@@ -63,7 +64,7 @@ const AddressesInfo = (props) => {
           {truncate(value, 8)}
         </Code>
         <Link
-          href={`https://solscan.io/account/${link}?cluster=devnet`}
+          href={`https://solscan.io/account/${link}?cluster=${SOLANA_CLUSTER}`}
           isExternal
         >
           <ExternalLinkIcon />

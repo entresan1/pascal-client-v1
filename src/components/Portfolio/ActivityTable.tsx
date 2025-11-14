@@ -27,6 +27,7 @@ import {
   TriangleDownIcon,
   TriangleUpIcon,
 } from "@chakra-ui/icons";
+import { SOLANA_CLUSTER } from "@/utils/constants";
 import {
   createColumnHelper,
   FilterFn,
@@ -143,7 +144,7 @@ const columns = [
       <ChakraNextLink
         to={`https://solscan.io/account/${info
           .getValue()
-          .toBase58()}?cluster=devnet`}
+          .toBase58()}?cluster=${SOLANA_CLUSTER}`}
       >
         <ExternalLinkIcon />
       </ChakraNextLink>

@@ -4,6 +4,25 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
       const { publicKey, orderData, marketPk, priceData } = req.body;
+      
+      // Validate required fields
+      if (!publicKey || !marketPk || !orderData || !priceData) {
+        res.status(400).json({ error: "Missing required fields" });
+        return;
+      }
+
+      // Validate publicKey format
+      if (typeof publicKey !== 'string' || publicKey.length < 32 || publicKey.length > 44) {
+        res.status(400).json({ error: "Invalid publicKey format" });
+        return;
+      }
+
+      // Validate marketPk format
+      if (typeof marketPk !== 'string' || marketPk.length < 32 || marketPk.length > 44) {
+        res.status(400).json({ error: "Invalid marketPk format" });
+        return;
+      }
+
       const {
         marketPriceSummary,
         marketOutcomesSummary,

@@ -24,10 +24,14 @@ export async function getProgram() {
     signTransaction: () => Promise.reject(),
     signAllTransactions: () => Promise.reject(),
   };
-  const connection = new Connection(clusterApiUrl("devnet"));
+  const endpoint = process.env.NEXT_PUBLIC_NODE || clusterApiUrl("mainnet-beta");
+  const connection = new Connection(endpoint);
   const provider = new AnchorProvider(connection, wallet, {});
   setProvider(provider);
-  const protocolAddress = new PublicKey(ProtocolAddresses.DEVNET_STABLE);
+  // Use mainnet protocol address - update this with your actual mainnet protocol address
+  const protocolAddress = process.env.NEXT_PUBLIC_PROTOCOL_ADDRESS 
+    ? new PublicKey(process.env.NEXT_PUBLIC_PROTOCOL_ADDRESS)
+    : new PublicKey(ProtocolAddresses.MAINNET_STABLE || ProtocolAddresses.DEVNET_STABLE);
 
   const program = await Program.at(protocolAddress, provider);
 

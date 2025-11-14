@@ -25,6 +25,7 @@ import {
   poolMint,
   tokenAccountPool,
 } from "../../../../utils/constants";
+import { SOLANA_CLUSTER } from "@/utils/constants";
 import { TokenSwap, TOKEN_SWAP_PROGRAM_ID } from "@solana/spl-token-swap";
 import * as token from "@solana/spl-token";
 import { MarketLiquidityInfo, LiquidityTooltip } from "./LiquidityInfo";
@@ -101,14 +102,13 @@ export const DepositSingleTokenType: FC = (props: {
       setLoading(true);
       let txid = await sendTransaction(transaction, connection);
 
-      console.log(
-        `Transaction submitted: https://solscan.io/tx/${txid}?cluster=devnet`
-      );
+      const explorerUrl = `https://solscan.io/tx/${txid}?cluster=${SOLANA_CLUSTER}`;
+      console.log(`Transaction submitted: ${explorerUrl}`);
       toast({
         title: "Transaction submitted",
         description: (
           <Link
-            href={`https://solscan.io/tx/${txid}?cluster=devnet`}
+            href={`https://solscan.io/tx/${txid}?cluster=${SOLANA_CLUSTER}`}
             isExternal
           >
             <HStack>

@@ -69,7 +69,7 @@ const Banner = () => {
               justifyContent="center"
               p="3"
             >
-              Pascal is currently only live on devnet.{" "}
+              Pascal is now live on mainnet.{" "}
               <Button
                 display={"contents"}
                 textColor={"blue.600"}

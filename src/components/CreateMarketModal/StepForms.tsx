@@ -317,7 +317,7 @@ export const SubmittedForm = ({ publicKey, success, isSubmitting, status }) => {
               : "Please try again later or contact support."}
           </Text>
           <Link
-            href={`https://solscan.io/account/${publicKey?.toBase58()}?cluster=devnet`}
+            href={`https://solscan.io/account/${publicKey?.toBase58()}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || "mainnet-beta"}`}
             display={success ? "block" : "none"}
             _hover={{
               transform: "translateX(2px) scale(1.01)",

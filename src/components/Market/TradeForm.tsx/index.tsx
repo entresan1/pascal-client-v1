@@ -30,6 +30,7 @@ import {
   InfoOutlineIcon,
   LockIcon,
 } from "@chakra-ui/icons";
+import { SOLANA_CLUSTER } from "@/utils/constants";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { createOrderUiStake, Orders } from "@monaco-protocol/client";
 import { Field, Formik } from "formik";
@@ -271,7 +272,7 @@ const Swap = ({ market }) => {
                   title: "Order placed",
                   description: (
                     <Link
-                      href={`https://solscan.io/tx/${txId}?cluster=devnet`}
+                      href={`https://solscan.io/tx/${txId}?cluster=${SOLANA_CLUSTER}`}
                       isExternal
                     >
                       <HStack>

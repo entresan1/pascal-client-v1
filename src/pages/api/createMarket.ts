@@ -17,7 +17,19 @@ export default async function handler(req, res) {
         marketAccount,
         priceData,
       } = req.body;
+
+      // Validate required fields
+      if (!marketAccount || !marketAccount.publicKey || !marketAccount.account) {
+        res.status(400).json({ error: "Missing required marketAccount fields" });
+        return;
+      }
+
+      // Validate publicKey format
       const { publicKey, account } = marketAccount;
+      if (typeof publicKey !== 'string' || publicKey.length < 32 || publicKey.length > 44) {
+        res.status(400).json({ error: "Invalid publicKey format" });
+        return;
+      }
       const {
         marketPriceSummary,
         marketOutcomesSummary,

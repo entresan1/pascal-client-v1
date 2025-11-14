@@ -17,6 +17,7 @@ import {
   airdropPDA,
   airdropProgramId,
 } from "@/utils/constants";
+import { SOLANA_CLUSTER } from "@/utils/constants";
 import * as token from "@solana/spl-token";
 
 export const Airdrop: FC = () => {
@@ -90,10 +91,10 @@ export const Airdrop: FC = () => {
     try {
       let txid = await sendTransaction(transaction, connection);
       alert(
-        `Transaction submitted: https://explorer.solana.com/tx/${txid}?cluster=devnet`
+        `Transaction submitted: https://explorer.solana.com/tx/${txid}?cluster=${SOLANA_CLUSTER}`
       );
       console.log(
-        `Transaction submitted: https://explorer.solana.com/tx/${txid}?cluster=devnet`
+        `Transaction submitted: https://explorer.solana.com/tx/${txid}?cluster=${SOLANA_CLUSTER}`
       );
     } catch (e) {
       console.log(JSON.stringify(e));
@@ -169,10 +170,10 @@ export const Airdrop: FC = () => {
     try {
       let txid = await sendTransaction(transaction, connection);
       alert(
-        `Transaction submitted: https://explorer.solana.com/tx/${txid}?cluster=devnet`
+        `Transaction submitted: https://explorer.solana.com/tx/${txid}?cluster=${SOLANA_CLUSTER}`
       );
       console.log(
-        `Transaction submitted: https://explorer.solana.com/tx/${txid}?cluster=devnet`
+        `Transaction submitted: https://explorer.solana.com/tx/${txid}?cluster=${SOLANA_CLUSTER}`
       );
     } catch (e) {
       console.log(JSON.stringify(e));

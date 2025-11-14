@@ -13,7 +13,10 @@ export const ProgramProvider = ({ children }: ProgramProviderProps) => {
   const [program, dispatch] = useReducer(reducer, initalState);
   const [provider, setProvider] = useState<AnchorProvider | null>(null);
   const wallet = useWallet();
-  const connection = new Connection(process.env.NEXT_PUBLIC_NODE!);
+  const connection = new Connection(
+    process.env.NEXT_PUBLIC_NODE || "https://api.mainnet-beta.solana.com",
+    { commitment: "confirmed" }
+  );
 
   useEffect(() => {
     if (connection !== null) {

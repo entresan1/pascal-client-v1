@@ -20,6 +20,7 @@ import {
   poolMint,
   feeAccount,
 } from "@/utils/constants";
+import { SOLANA_CLUSTER } from "@/utils/constants";
 import { TokenSwap, TOKEN_SWAP_PROGRAM_ID } from "@solana/spl-token-swap";
 import * as token from "@solana/spl-token";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
@@ -120,12 +121,9 @@ export const SwapToken: FC = () => {
 
     try {
       let txid = await sendTransaction(transaction, connection);
-      alert(
-        `Transaction submitted: https://explorer.solana.com/tx/${txid}?cluster=devnet`
-      );
-      console.log(
-        `Transaction submitted: https://explorer.solana.com/tx/${txid}?cluster=devnet`
-      );
+      const explorerUrl = `https://explorer.solana.com/tx/${txid}?cluster=${SOLANA_CLUSTER}`;
+      alert(`Transaction submitted: ${explorerUrl}`);
+      console.log(`Transaction submitted: ${explorerUrl}`);
     } catch (e) {
       console.log(JSON.stringify(e));
       alert(JSON.stringify(e));

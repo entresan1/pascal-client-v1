@@ -31,7 +31,7 @@ export async function loadKp() {
 let hasBalance = false;
 export async function getProvider() {
   const kp = await loadKp();
-  const ENDPOINT = "https://api.devnet.solana.com";
+  const ENDPOINT = process.env.NEXT_PUBLIC_NODE || "https://api.mainnet-beta.solana.com";
   const connection = new Connection(ENDPOINT, {
     commitment: "confirmed",
   });

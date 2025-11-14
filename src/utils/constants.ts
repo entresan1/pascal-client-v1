@@ -30,8 +30,10 @@ export const resolutionSources = [
   },
 ];
 
+// NOTE: These addresses are currently devnet addresses. 
+// Update these with your mainnet addresses before deploying to production.
 export const usdcMint = new Web3.PublicKey(
-  "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
+  "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU" // Mainnet USDC: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
 );
 
 export const tokenSwapStateAccount = new Web3.PublicKey(
@@ -93,3 +95,6 @@ export const SPL_BINARY_OPTION_PROGRAM_ID = new Web3.PublicKey(
 export const MOBILE_WIDTH: number = 800; // px
 
 export const ORDERBOOK_LEVELS: number = 25; // rows count
+
+// Solana cluster for explorer links (mainnet-beta, devnet, testnet)
+export const SOLANA_CLUSTER = process.env.NEXT_PUBLIC_SOLANA_NETWORK || "mainnet-beta";

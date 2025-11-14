@@ -14,6 +14,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { Discussion } from "@/models/Discussion";
 import * as web3 from "@solana/web3.js";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { SOLANA_CLUSTER } from "@/utils/constants";
 
 const DISCUSSION_PROGRAM_ID = "GeJqz9A7ZCS4vBvjWSzVkXaMsweEBpfmb7EaUjdzphbC";
 
@@ -103,12 +104,9 @@ export const DiscussionForm = () => {
 
     try {
       let txid = await sendTransaction(transaction, connection);
-      alert(
-        `Transaction submitted: https://explorer.solana.com/tx/${txid}?cluster=devnet`
-      );
-      console.log(
-        `Transaction submitted: https://explorer.solana.com/tx/${txid}?cluster=devnet`
-      );
+      const explorerUrl = `https://explorer.solana.com/tx/${txid}?cluster=${SOLANA_CLUSTER}`;
+      alert(`Transaction submitted: ${explorerUrl}`);
+      console.log(`Transaction submitted: ${explorerUrl}`);
     } catch (e) {
       console.log(JSON.stringify(e));
       alert(JSON.stringify(e));
@@ -150,7 +148,8 @@ export const DiscussionForm = () => {
 };
 
 export const DiscussionList = () => {
-  const connection = new web3.Connection(web3.clusterApiUrl("devnet"));
+  const endpoint = process.env.NEXT_PUBLIC_NODE || web3.clusterApiUrl("mainnet-beta");
+  const connection = new web3.Connection(endpoint);
   const [discussions, setDiscussions] = useState<Discussion[]>([]);
 
   useEffect(() => {
