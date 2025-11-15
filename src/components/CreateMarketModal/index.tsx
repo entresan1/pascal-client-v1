@@ -149,13 +149,24 @@ async function createVerboseMarket(
 export const CreateMarketModal = () => {
   // Get program from context without throwing if not loaded
   const programFromContext = useContext(ProgramContext);
-  const { publicKey } = useWallet();
+  const { publicKey, connected } = useWallet();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [marketPk, setMarketPk] = useState<PublicKey>();
   const [createStatus, setCreateStatus] = useState<CreateStatus>(
     CreateStatus.CreatingMarket
   );
   let duration = 0.5;
+
+  // Debug logging
+  React.useEffect(() => {
+    console.log("CreateMarketModal - Program state:", {
+      hasProgram: !!programFromContext,
+      hasProvider: !!programFromContext?.provider,
+      hasPublicKey: !!publicKey,
+      connected,
+      programId: process.env.NEXT_PUBLIC_PROGRAM_ID,
+    });
+  }, [programFromContext, publicKey, connected]);
 
   async function addMarket(values) {
     const {
@@ -326,11 +337,25 @@ export const CreateMarketModal = () => {
             />
 
             <ModalBody className={styles.modal_container}>
-              {!programFromContext && !publicKey ? (
+              {!publicKey ? (
                 <Box m="10px auto" p={8} textAlign="center">
                   <Text color={mode("gray.700", "gray.300")}>
                     Please connect your wallet to create a market.
                   </Text>
+                </Box>
+              ) : !programFromContext || !programFromContext.provider ? (
+                <Box m="10px auto" p={8} textAlign="center">
+                  <Text color={mode("gray.700", "gray.300")} mb={2}>
+                    Loading program...
+                  </Text>
+                  <Text color={mode("gray.500", "gray.400")} fontSize="sm">
+                    Please wait while the program initializes. This may take a few seconds.
+                  </Text>
+                  {!process.env.NEXT_PUBLIC_PROGRAM_ID && (
+                    <Text color="red.500" fontSize="xs" mt={2}>
+                      Warning: NEXT_PUBLIC_PROGRAM_ID is not configured.
+                    </Text>
+                  )}
                 </Box>
               ) : (
                 <Box m="10px auto">

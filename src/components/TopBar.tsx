@@ -33,6 +33,25 @@ import { Logo } from "./Logo";
 
 import styles from "@/styles/Home.module.css";
 
+const DividerWithColor = ({ onOpen }) => {
+  const dividerColor = useColorModeValue("gray.800", "gray.100");
+  return (
+    <HStack>
+      <Divider
+        mx={3}
+        orientation="vertical"
+        height={"20px"}
+        borderWidth={"1px"}
+        rounded={"xl"}
+        borderColor={dividerColor}
+      />
+      <Button variant={"ghost"} rounded={"xl"} onClick={onOpen}>
+        Create market
+      </Button>
+    </HStack>
+  );
+};
+
 export default function WithSubnavigation() {
   const { publicKey } = useWallet();
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
@@ -92,20 +111,7 @@ export default function WithSubnavigation() {
         >
           <ColorModeSwitcher />
           <Flex display={{ base: "none", md: "block" }}>
-            <HStack>
-              <Divider
-                mx={3}
-                orientation="vertical"
-                height={"20px"}
-                borderWidth={"1px"}
-                rounded={"xl"}
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                borderColor={useColorModeValue("gray.800", "gray.100")}
-              />
-              <Button variant={"ghost"} rounded={"xl"} onClick={onOpen}>
-                Create market
-              </Button>
-            </HStack>
+            <DividerWithColor onOpen={onOpen} />
 
             <Modal
               onClose={onClose}

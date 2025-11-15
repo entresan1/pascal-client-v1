@@ -24,19 +24,19 @@ const MarketCard = React.lazy(() => import("./MarketCard"));
 const MarketList = ({ markets }) => {
   const { value, getCheckboxProps } = useCheckboxGroup({ defaultValue: [] });
 
+  // Calculate filtered markets - must be done after hooks
+  const filteredMarkets = React.useMemo(() => {
+    if (!markets) return [];
+    return markets.filter(({ category }) => value.includes(category));
+  }, [markets, value]);
+
+  // Early return must be AFTER all hooks
   if (!markets) {
     return (
       <Alert status="error" rounded={"lg"}>
         <AlertIcon mr={4} />
         An error has occured loading markets.
       </Alert>
-    );
-  }
-
-  let filteredMarkets = [];
-  if (markets) {
-    filteredMarkets = markets.filter(({ category }) =>
-      value.includes(category)
     );
   }
 

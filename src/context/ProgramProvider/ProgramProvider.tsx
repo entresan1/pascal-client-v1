@@ -55,26 +55,37 @@ export const ProgramProvider = ({ children }: ProgramProviderProps) => {
       }
 
       if (!provider || !wallet.publicKey) {
+        console.log("ProgramProvider: Waiting for provider and wallet...", {
+          hasProvider: !!provider,
+          hasPublicKey: !!wallet.publicKey,
+          connected: wallet.connected,
+        });
         return;
       }
 
       try {
+        console.log("ProgramProvider: Loading program...", {
+          programId: process.env.NEXT_PUBLIC_PROGRAM_ID,
+          publicKey: wallet.publicKey.toString(),
+        });
         const programId = new PublicKey(process.env.NEXT_PUBLIC_PROGRAM_ID);
         const loadedProgram = await Program.at(programId, provider);
         dispatch({
           type: ProgramActionTypes.SET_PROGRAM,
           payload: loadedProgram,
         });
-        console.log("Program loaded successfully", loadedProgram);
+        console.log("ProgramProvider: Program loaded successfully", {
+          programId: loadedProgram.programId.toString(),
+        });
       } catch (error) {
-        console.error("Error loading program:", error);
+        console.error("ProgramProvider: Error loading program:", error);
         // Don't throw - just log the error
         // The program will remain null, and components should handle this
       }
     };
 
     loadProgram();
-  }, [provider, wallet.publicKey?.toString()]);
+  }, [provider, wallet.publicKey?.toString(), wallet.connected]);
 
   return (
     <ProgramContext.Provider value={program}>

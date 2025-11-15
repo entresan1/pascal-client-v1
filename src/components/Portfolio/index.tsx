@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 import {
   Heading,
@@ -26,7 +26,7 @@ import Stats from "components/Portfolio/Stats";
 import PositionsTable from "components/Portfolio/PositionsTable";
 import ReturnsGraph from "components/Portfolio/ReturnsGraph";
 import ActivityTable from "components/Portfolio/ActivityTable";
-import { useProgram } from "@/context/ProgramProvider";
+import { ProgramContext } from "@/context/ProgramProvider/state";
 import { calculateProbability } from "@/utils/helpers";
 
 import styles from "@/styles/Home.module.css";
@@ -34,7 +34,7 @@ import styles from "@/styles/Home.module.css";
 export const PositionsContext = createContext<any>({});
 
 const Portfolio = () => {
-  const program = useProgram();
+  const program = useContext(ProgramContext);
   const { publicKey } = useWallet();
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [positions, setPositions] = useState<any>(null);
@@ -80,10 +80,11 @@ const Portfolio = () => {
   };
 
   useEffect(() => {
+    if (!program || !publicKey) return;
     const fetchPositions = async () => {
       try {
         const response = await MarketPositions.marketPositionQuery(program)
-          .filterByPurchaser(publicKey!)
+          .filterByPurchaser(publicKey)
           .fetch();
         if (response.success) {
           const marketPositionAccounts = response.data.marketPositionAccounts;
@@ -135,7 +136,7 @@ const Portfolio = () => {
             mapping.map(async (position) => {
               const trades = await Trades.tradeQuery(program)
                 .filterByMarket(position.account.market)
-                .filterByPurchaser(publicKey!)
+                .filterByPurchaser(publicKey)
                 .fetch();
               return {
                 ...position,
@@ -154,7 +155,7 @@ const Portfolio = () => {
       }
     };
     fetchPositions();
-  }, [program, data]);
+  }, [program, data, publicKey]);
 
   return (
     <Box pt={14}>
