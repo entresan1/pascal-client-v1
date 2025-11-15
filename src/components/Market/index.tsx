@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
@@ -29,7 +29,7 @@ import WithSubnavigation from "../TopBar";
 import MarketResolution from "./MarketResolution";
 import Outcomes from "./Outcomes";
 import Layout from "../Layout";
-import { useProgram } from "@/context/ProgramProvider";
+import { ProgramContext } from "@/context/ProgramProvider/state";
 import { getPriceData } from "@/utils/monaco";
 import { calculateProbability } from "@/utils/helpers";
 
@@ -44,7 +44,7 @@ export const PriceDataContext = createContext<any>({});
 
 const Market = ({ market }) => {
   const { prices } = market;
-  const program = useProgram();
+  const program = useContext(ProgramContext);
   const { asPath } = useRouter();
   const marketPk = asPath.split("/")[2];
   const [priceData, setPriceData] = useState<any>(null);
@@ -93,6 +93,7 @@ const Market = ({ market }) => {
   probB.toFixed(2);
 
   useEffect(() => {
+    if (!program || !marketPk) return;
     const fetchPriceData = async () => {
       try {
         const res = await getPriceData(program, new PublicKey(marketPk));
@@ -109,7 +110,7 @@ const Market = ({ market }) => {
     };
 
     fetchPriceData();
-  }, [program]);
+  }, [program, marketPk]);
 
   return (
     <div className={styles.container}>

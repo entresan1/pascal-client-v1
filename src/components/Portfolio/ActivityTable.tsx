@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useContext } from "react";
 import {
   HStack,
   Text,
@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { getMarket, Orders } from "@monaco-protocol/client";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useProgram } from "@/context/ProgramProvider";
+import { ProgramContext } from "@/context/ProgramProvider/state";
 import { FaCircle } from "react-icons/fa";
 import {
   ExternalLinkIcon,
@@ -326,12 +326,12 @@ const DataTable = <Data extends object>({
 };
 
 export const ActivityTable = () => {
-  const program = useProgram();
+  const program = useContext(ProgramContext);
   const { publicKey } = useWallet();
   const [activities, setAcitivities] = useState<any>();
 
   useEffect(() => {
-    if (publicKey) {
+    if (publicKey && program) {
       const fetchActivities = async () => {
         try {
           const orderResponse = await Orders.orderQuery(program)
@@ -362,7 +362,7 @@ export const ActivityTable = () => {
       };
       fetchActivities();
     }
-  }, [program]);
+  }, [program, publicKey]);
 
   return (
     <>

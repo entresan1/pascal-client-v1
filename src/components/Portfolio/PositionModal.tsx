@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, memo } from "react";
+import { useEffect, useMemo, useState, memo, useContext } from "react";
 import {
   Button,
   useColorModeValue as mode,
@@ -125,7 +125,7 @@ const PositionModal = ({ isOpen, onClose, position }) => {
 
 const FormBody = ({ position }) => {
   const { prices, trades } = position;
-  const program = useProgram();
+  const program = useContext(ProgramContext);
   const { publicKey } = useWallet();
   const [outcomeIndex, setOutcomeIndex] = useState<number>(0);
 
@@ -209,6 +209,9 @@ const FormBody = ({ position }) => {
     outcomeIndex: number,
     stake: number
   ) {
+    if (!program) {
+      throw new Error("Program not loaded");
+    }
     try {
       const priceData = await getPriceData(program, marketPk!);
       const bids = priceData.marketPriceSummary[outcomeIndex].for;

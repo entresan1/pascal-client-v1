@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { ProgramContext } from "@/context/ProgramProvider/state";
 import Balancer from "react-wrap-balancer";
 import {
   Button,
@@ -40,7 +41,6 @@ import { TokenSwapForm } from "./TokenPool";
 import { Airdrop } from "./TokenPool/AirdropForm";
 import { getPriceData, logResponse } from "@/utils/monaco";
 import { PublicKey } from "@solana/web3.js";
-import { useProgram } from "@/context/ProgramProvider";
 import { PriceDataContext } from "..";
 
 import styles from "@/styles/Home.module.css";
@@ -121,7 +121,7 @@ const Swap = ({ market }) => {
     prices,
     marketWinningOutcomeIndex,
   } = market;
-  const program = useProgram();
+  const program = useContext(ProgramContext);
   const { publicKey } = useWallet();
   const { priceData, probA } = useContext(PriceDataContext);
   const [outcomeIndex, setOutcomeIndex] = useState<number>(0);

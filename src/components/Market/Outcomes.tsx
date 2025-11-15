@@ -19,7 +19,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { OrderBook } from "./Orderbook";
 import { PublicKey } from "@solana/web3.js";
 import { getMarketPosition, MarketPosition } from "@monaco-protocol/client";
-import { useProgram } from "@/context/ProgramProvider";
+import { ProgramContext } from "@/context/ProgramProvider/state";
 import { PriceDataContext } from ".";
 
 interface CheckboxProps extends UseCheckboxProps {
@@ -182,13 +182,13 @@ const OutcomeItem = ({ outcome, index, prices, userPosition, outcomes }: Outcome
 };
 
 const Outcomes = ({ market }) => {
-  const program = useProgram();
+  const program = useContext(ProgramContext);
   const { publicKey } = useWallet();
   const { outcomes, prices } = market;
   const [marketPosition, setMarketPosition] = useState<any>();
 
   useEffect(() => {
-    if (publicKey) {
+    if (publicKey && program) {
       const fetchUserMarketPositions = async () => {
         try {
           const res = await getMarketPosition(
@@ -203,7 +203,7 @@ const Outcomes = ({ market }) => {
       };
       fetchUserMarketPositions();
     }
-  }, [program]);
+  }, [program, publicKey, market.publicKey]);
 
   return (
     <VStack
