@@ -64,7 +64,6 @@ export default function WithSubnavigation() {
         </Flex>
         <Flex
           flex={{ base: 1 }}
-          mt={2}
           justify={{ base: "center", md: "left" }}
           align="center"
         >
@@ -72,9 +71,9 @@ export default function WithSubnavigation() {
           <Text
             textAlign={useBreakpointValue({ base: "center", md: "left" })}
             fontFamily={"heading"}
-            color={useColorModeValue("gray.800", "white")}
+            color="gray.500"
             fontSize="xl"
-            fontWeight="bold"
+            fontWeight="medium"
           >
             Tricast
           </Text>
