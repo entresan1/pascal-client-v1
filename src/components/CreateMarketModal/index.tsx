@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import {
   Box,
+  Text,
   useColorModeValue as mode,
   ModalOverlay,
   ModalBody,
@@ -325,25 +326,33 @@ export const CreateMarketModal = () => {
             />
 
             <ModalBody className={styles.modal_container}>
-              <Box m="10px auto">
-                <ResizablePanel>
-                  <FormStepper
-                    success={isSuccess}
-                    marketPk={marketPk}
-                    {...props}
-                  >
-                    <Form1 />
-                    <Form2 title={props.values.title} />
-                    <SubmittedForm
-                      publicKey={marketPk}
+              {!programFromContext && !publicKey ? (
+                <Box m="10px auto" p={8} textAlign="center">
+                  <Text color={mode("gray.700", "gray.300")}>
+                    Please connect your wallet to create a market.
+                  </Text>
+                </Box>
+              ) : (
+                <Box m="10px auto">
+                  <ResizablePanel>
+                    <FormStepper
                       success={isSuccess}
-                      isSubmitting={props.isSubmitting}
-                      status={createStatus}
-                      formStatus={props.status}
-                    />
-                  </FormStepper>
-                </ResizablePanel>
-              </Box>
+                      marketPk={marketPk}
+                      {...props}
+                    >
+                      <Form1 />
+                      <Form2 title={props.values.title} />
+                      <SubmittedForm
+                        publicKey={marketPk}
+                        success={isSuccess}
+                        isSubmitting={props.isSubmitting}
+                        status={createStatus}
+                        formStatus={props.status}
+                      />
+                    </FormStepper>
+                  </ResizablePanel>
+                </Box>
+              )}
             </ModalBody>
           </ModalContent>
         )}
