@@ -48,15 +48,23 @@ async function createVerboseMarket(
   lockTimestamp,
   setCreateStatus
 ) {
-  const checkRoles = await checkOperatorRoles(
-    program,
-    program.provider.publicKey
-  );
-
-  if (!checkRoles.data.market)
-    throw new Error(
-      `Currently set wallet ${program.provider.publicKey} does not have the operator role`
+  // Check operator roles - but allow market creation to proceed even if check fails
+  // The on-chain transaction will fail if user doesn't have permission
+  try {
+    const checkRoles = await checkOperatorRoles(
+      program,
+      program.provider.publicKey
     );
+
+    if (!checkRoles.data.market) {
+      console.warn(
+        `Wallet ${program.provider.publicKey} may not have operator role. Market creation will be attempted anyway.`
+      );
+    }
+  } catch (error) {
+    console.warn("Could not check operator roles:", error);
+    // Continue anyway - let the on-chain transaction handle the permission check
+  }
 
   // Generate a publicKey to represent the event
   const eventAccountKeyPair = Keypair.generate();
@@ -199,9 +207,17 @@ export const CreateMarketModal = () => {
       setIsSuccess(true);
       setCreateStatus(CreateStatus.Success);
       setMarketPk(marketPk);
-    } catch (error) {
+    } catch (error: any) {
       setIsSuccess(false);
       console.log("addMarket", error);
+      // Show user-friendly error message
+      const errorMessage = error?.message || "Failed to create market";
+      if (errorMessage.includes("operator role")) {
+        throw new Error(
+          "You don't have permission to create markets. Please contact an administrator to grant you the operator role."
+        );
+      }
+      throw error;
     }
   }
 
@@ -238,7 +254,14 @@ export const CreateMarketModal = () => {
         }}
         validationSchema={validationSchema}
         onSubmit={async (values, actions) => {
-          await addMarket(values);
+          try {
+            await addMarket(values);
+          } catch (error: any) {
+            // Error is already handled in addMarket, but we can set form errors here
+            actions.setStatus({
+              error: error?.message || "Failed to create market. Please try again.",
+            });
+          }
         }}
       >
         {(props) => (
@@ -279,6 +302,7 @@ export const CreateMarketModal = () => {
                       success={isSuccess}
                       isSubmitting={props.isSubmitting}
                       status={createStatus}
+                      formStatus={props.status}
                     />
                   </FormStepper>
                 </ResizablePanel>

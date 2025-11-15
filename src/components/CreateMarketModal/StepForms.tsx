@@ -254,7 +254,7 @@ export const Form2 = ({ title }) => {
   );
 };
 
-export const SubmittedForm = ({ publicKey, success, isSubmitting, status }) => {
+export const SubmittedForm = ({ publicKey, success, isSubmitting, status, formStatus }) => {
   return (
     <Box color={"gray.50"}>
       <Stack mb={10} mt={12} transition={"all 2s ease-in-out"}>
@@ -275,16 +275,29 @@ export const SubmittedForm = ({ publicKey, success, isSubmitting, status }) => {
             </Center>
           </SlideFade>
         ) : (
-          <Heading
-            lineHeight={1.2}
-            size={"2xl"}
-            fontWeight={"medium"}
-            color={success ? "gray.50" : mode("gray.700", "gray.50")}
-          >
-            {success
-              ? "Your market has been created!"
-              : "Market creation failed 🙁"}
-          </Heading>
+          <>
+            <Heading
+              lineHeight={1.2}
+              size={"2xl"}
+              fontWeight={"medium"}
+              color={success ? "gray.50" : mode("gray.700", "gray.50")}
+            >
+              {success
+                ? "Your market has been created!"
+                : "Market creation failed 🙁"}
+            </Heading>
+            {formStatus?.error && (
+              <Text
+                mt={4}
+                color={mode("red.600", "red.400")}
+                fontSize="sm"
+                textAlign="center"
+                px={4}
+              >
+                {formStatus.error}
+              </Text>
+            )}
+          </>
         )}
       </Stack>
 

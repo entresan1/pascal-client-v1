@@ -34,9 +34,6 @@ import styles from "@/styles/Home.module.css";
 
 export default function WithSubnavigation() {
   const { publicKey } = useWallet();
-  const isAdmin = publicKey
-    ? publicKey.toString() === process.env.NEXT_PUBLIC_OWNER_PUBLIC_KEY
-    : false;
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
 
   return (
@@ -90,36 +87,34 @@ export default function WithSubnavigation() {
           spacing={4}
         >
           <ColorModeSwitcher />
-          {isAdmin && (
-            <Flex display={{ base: "none", md: "block" }}>
-              <HStack>
-                <Divider
-                  mx={3}
-                  orientation="vertical"
-                  height={"20px"}
-                  borderWidth={"1px"}
-                  rounded={"xl"}
-                  // eslint-disable-next-line react-hooks/rules-of-hooks
-                  borderColor={useColorModeValue("gray.800", "gray.100")}
-                />
-                <Button variant={"ghost"} rounded={"xl"} onClick={onOpen}>
-                  Create market
-                </Button>
-              </HStack>
+          <Flex display={{ base: "none", md: "block" }}>
+            <HStack>
+              <Divider
+                mx={3}
+                orientation="vertical"
+                height={"20px"}
+                borderWidth={"1px"}
+                rounded={"xl"}
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                borderColor={useColorModeValue("gray.800", "gray.100")}
+              />
+              <Button variant={"ghost"} rounded={"xl"} onClick={onOpen}>
+                Create market
+              </Button>
+            </HStack>
 
-              <Modal
-                onClose={onClose}
-                isOpen={isOpen}
-                isCentered
-                motionPreset="slideInBottom"
-                closeOnOverlayClick={false}
-                scrollBehavior={"inside"}
-                size={"xl"}
-              >
-                <CreateMarketModal />
-              </Modal>
-            </Flex>
-          )}
+            <Modal
+              onClose={onClose}
+              isOpen={isOpen}
+              isCentered
+              motionPreset="slideInBottom"
+              closeOnOverlayClick={false}
+              scrollBehavior={"inside"}
+              size={"xl"}
+            >
+              <CreateMarketModal />
+            </Modal>
+          </Flex>
 
           <WalletMultiButton
             className={useColorModeValue(
