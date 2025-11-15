@@ -133,6 +133,51 @@ const CheckboxOption = (props: CheckboxProps) => {
   );
 };
 
+interface OutcomeItemProps {
+  outcome: {
+    index: number;
+    outcome: string;
+    latestMatchedPrice: number;
+    matchedTotal: BN;
+  };
+  index: number;
+  prices: any;
+  userPosition: any;
+  outcomes: any[];
+}
+
+const OutcomeItem = ({ outcome, index, prices, userPosition, outcomes }: OutcomeItemProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const handleChange = (value) => {
+    setIsOpen(!isOpen);
+  };
+  const { value, getCheckboxProps } = useCheckboxGroup({
+    onChange: handleChange,
+  });
+
+  return (
+    <>
+      <CheckboxOption
+        outcome={outcome}
+        prices={prices}
+        userPosition={userPosition}
+        {...getCheckboxProps({
+          value: index.toString(), // getCheckboxProps value only accepts String
+        })}
+      />
+      <Box>
+        <Collapse in={isOpen} animateOpacity>
+          <OrderBook
+            outcomes={outcomes}
+            outcomeIndex={index}
+            prices={prices}
+          />
+        </Collapse>
+      </Box>
+    </>
+  );
+};
+
 const Outcomes = ({ market }) => {
   const program = useProgram();
   const { publicKey } = useWallet();
@@ -177,42 +222,18 @@ const Outcomes = ({ market }) => {
         <Text minW={12}>YOUR STAKE</Text>
       </Flex>
       <Stack width={"full"} spacing={3}>
-        {outcomes?.map((outcome, index: number) => {
-          // eslint-disable-next-line react-hooks/rules-of-hooks
-          const [isOpen, setIsOpen] = useState(false);
-          const handleChange = (value) => {
-            setIsOpen(!isOpen);
-          };
-          // eslint-disable-next-line react-hooks/rules-of-hooks
-          const { value, getCheckboxProps } = useCheckboxGroup({
-            onChange: handleChange,
-          });
-
-          return (
-            <>
-              <CheckboxOption
-                key={index}
-                outcome={outcome}
-                prices={prices}
-                userPosition={
-                  marketPosition?.outcomeMaxExposure[index === 0 ? 1 : 0]
-                }
-                {...getCheckboxProps({
-                  value: index.toString(), // getCheckboxProps value only accepts String
-                })}
-              />
-              <Box key={index}>
-                <Collapse in={isOpen} animateOpacity>
-                  <OrderBook
-                    outcomes={outcomes}
-                    outcomeIndex={index}
-                    prices={prices}
-                  />
-                </Collapse>
-              </Box>
-            </>
-          );
-        })}
+        {outcomes?.map((outcome, index: number) => (
+          <OutcomeItem
+            key={index}
+            outcome={outcome}
+            index={index}
+            prices={prices}
+            userPosition={
+              marketPosition?.outcomeMaxExposure[index === 0 ? 1 : 0]
+            }
+            outcomes={outcomes}
+          />
+        ))}
       </Stack>
     </VStack>
   );
