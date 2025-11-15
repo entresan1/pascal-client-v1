@@ -293,7 +293,7 @@ const Market = ({ market }) => {
                 width={"40%"}
                 src={"/gradient-bg.png"}
                 // eslint-disable-next-line react-hooks/rules-of-hooks
-                alt={"Pascal Market"}
+                alt={"Tricast Market"}
                 right={"100px"}
                 transform={"rotate(280deg)"}
               />

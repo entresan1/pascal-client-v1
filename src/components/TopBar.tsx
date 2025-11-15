@@ -29,6 +29,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import ChakraNextLink from "./ChakraNextLink";
 import { CreateMarketModal } from "./CreateMarketModal";
+import { Logo } from "./Logo";
 
 import styles from "@/styles/Home.module.css";
 
@@ -65,13 +66,17 @@ export default function WithSubnavigation() {
           flex={{ base: 1 }}
           mt={2}
           justify={{ base: "center", md: "left" }}
+          align="center"
         >
+          <Logo mr={2} />
           <Text
             textAlign={useBreakpointValue({ base: "center", md: "left" })}
             fontFamily={"heading"}
             color={useColorModeValue("gray.800", "white")}
+            fontSize="xl"
+            fontWeight="bold"
           >
-            Pascal
+            Tricast
           </Text>
         </Flex>
 
@@ -330,18 +335,8 @@ const NAV_ITEMS: Array<NavItem> = [
     href: "/portfolio",
   },
   {
-    label: "Docs",
-    href: "https://docs.pascal.fi/",
+    label: "X",
+    href: "https://x.com/TricastMarket",
     isExternal: true,
-  },
-  {
-    label: "More",
-    children: [
-      {
-        label: "Twitter",
-        // subLabel: 'Trending Design to inspire you',
-        href: "https://twitter.com/bryantanjw",
-      },
-    ],
   },
 ];

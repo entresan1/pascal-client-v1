@@ -87,7 +87,7 @@ const MarketList = ({ markets }) => {
           position={"absolute"}
           zIndex={-1}
           src={"gradient-bg.png"}
-          alt={"Pascal Home"}
+          alt={"Tricast Home"}
           right={"40px"}
           top={"-200px"}
         />

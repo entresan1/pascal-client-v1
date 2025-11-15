@@ -26,12 +26,12 @@ const Home: NextPage = ({
     <div>
       <div className={styles.container}>
         <Head>
-          <title>Pascal: Trade on the outcome of events</title>
+          <title>Tricast: Trade on the outcome of events</title>
           <meta
             name="description"
             content="Trade directly on the outcome of events"
           />
-          <meta property="og:title" content="Pascal" />
+          <meta property="og:title" content="Tricast" />
           <meta
             property="og:description"
             content="Trade directly on the outcome of events"

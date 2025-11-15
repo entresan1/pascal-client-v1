@@ -69,7 +69,7 @@ const Banner = () => {
               justifyContent="center"
               p="3"
             >
-              Pascal is now live on mainnet.{" "}
+              Tricast is now live on mainnet.{" "}
               <Button
                 display={"contents"}
                 textColor={"blue.600"}

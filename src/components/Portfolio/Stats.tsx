@@ -116,7 +116,7 @@ const Stats = () => {
       <StatCard label={"Portfolio value"} />
       <Image
         src="/portfolioCard.png"
-        alt="Pascal Portfolio Image"
+        alt="Tricast Portfolio Image"
         width={{ base: "100%", md: "35%" }}
         height={140}
         rounded="12px"

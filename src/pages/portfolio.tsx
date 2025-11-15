@@ -15,12 +15,12 @@ const PortfolioPage: NextPage = ({}: InferGetStaticPropsType<
   return (
     <div className={styles.container}>
       <Head>
-        <title>Pascal Portfolio</title>
+        <title>Tricast Portfolio</title>
         <meta
           name="description"
           content="Trade directly on the outcome of events"
         />
-        <meta property="og:title" content="Pascal Protocol" />
+        <meta property="og:title" content="Tricast Protocol" />
         <meta
           property="og:description"
           content="Trade directly on the outcome of events"

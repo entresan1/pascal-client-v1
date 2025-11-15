@@ -243,7 +243,7 @@ const Portfolio = () => {
           position={"fixed"}
           overflow={"hidden"}
           src={"/portfolioBgGlow.png"}
-          alt="Pascal Portfolio"
+          alt="Tricast Portfolio"
           opacity={0.12}
           left={"20%"}
           width={"80%"}

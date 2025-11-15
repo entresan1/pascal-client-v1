@@ -298,7 +298,7 @@ const PositionsTable = () => {
             <ScaleFade in={true} initialScale={0.9}>
               <Image
                 src="/emptyState.png"
-                alt="Empty Pascal Position Tab"
+                alt="Empty Tricast Position Tab"
                 width={250}
                 height={250}
               />
