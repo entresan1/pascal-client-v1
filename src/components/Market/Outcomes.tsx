@@ -11,7 +11,6 @@ import {
   Flex,
   Collapse,
   UseCheckboxProps,
-  useCheckboxGroup,
   Checkbox,
   useCheckbox,
 } from "@chakra-ui/react";
@@ -36,9 +35,13 @@ interface CheckboxProps extends UseCheckboxProps {
 
 const CheckboxOption = (props: CheckboxProps) => {
   const { publicKey } = useWallet();
-  const { outcome, prices, userPosition, ...radioProps } = props;
+  const { outcome, prices, userPosition, isChecked, onChange, ...radioProps } = props;
   const { state, getCheckboxProps, getInputProps, htmlProps } =
-    useCheckbox(radioProps);
+    useCheckbox({
+      ...radioProps,
+      isChecked: isChecked !== undefined ? isChecked : radioProps.isChecked,
+      onChange: onChange || radioProps.onChange,
+    });
   const { probA, probB } = useContext(PriceDataContext);
 
   const highlightColor = ["purple", "teal", "pink"];
@@ -148,12 +151,13 @@ interface OutcomeItemProps {
 
 const OutcomeItem = ({ outcome, index, prices, userPosition, outcomes }: OutcomeItemProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const handleChange = (value) => {
-    setIsOpen(!isOpen);
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = (event) => {
+    const newChecked = !isChecked;
+    setIsChecked(newChecked);
+    setIsOpen(newChecked);
   };
-  const { value, getCheckboxProps } = useCheckboxGroup({
-    onChange: handleChange,
-  });
 
   return (
     <>
@@ -161,9 +165,8 @@ const OutcomeItem = ({ outcome, index, prices, userPosition, outcomes }: Outcome
         outcome={outcome}
         prices={prices}
         userPosition={userPosition}
-        {...getCheckboxProps({
-          value: index.toString(), // getCheckboxProps value only accepts String
-        })}
+        isChecked={isChecked}
+        onChange={handleCheckboxChange}
       />
       <Box>
         <Collapse in={isOpen} animateOpacity>
