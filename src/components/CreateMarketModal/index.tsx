@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Box,
   useColorModeValue as mode,
@@ -21,10 +21,11 @@ import {
   checkOperatorRoles,
 } from "@monaco-protocol/admin-client";
 import { Form1, Form2, SubmittedForm, FormStepper } from "./StepForms";
-import { useProgram } from "@/context/ProgramProvider";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { getPriceData, logResponse } from "@/utils/monaco";
 import { ResizablePanel } from "../common/ResizablePanel";
 import { PRICE_LADDER, usdcMint } from "@/utils/constants";
+import { ProgramContext } from "@/context/ProgramProvider/state";
 
 import styles from "@/styles/Home.module.css";
 
@@ -48,6 +49,15 @@ async function createVerboseMarket(
   lockTimestamp,
   setCreateStatus
 ) {
+  // Validate program
+  if (!program || !program.provider) {
+    throw new Error("Program not initialized. Please ensure your wallet is connected.");
+  }
+
+  if (!program.provider.publicKey) {
+    throw new Error("Wallet not connected. Please connect your wallet to create a market.");
+  }
+
   // Check operator roles - but allow market creation to proceed even if check fails
   // The on-chain transaction will fail if user doesn't have permission
   try {
@@ -136,7 +146,9 @@ async function createVerboseMarket(
 }
 
 export const CreateMarketModal = () => {
-  const program = useProgram();
+  // Get program from context without throwing if not loaded
+  const programFromContext = useContext(ProgramContext);
+  const { publicKey } = useWallet();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [marketPk, setMarketPk] = useState<PublicKey>();
   const [createStatus, setCreateStatus] = useState<CreateStatus>(
@@ -155,8 +167,19 @@ export const CreateMarketModal = () => {
       oracleSymbol,
       ticker,
       tag,
-      program,
     } = values;
+
+    // Use program from context, not from form values
+    const program = programFromContext;
+    
+    // Validate program is available
+    if (!program || !program.provider) {
+      throw new Error("Program not initialized. Please ensure your wallet is connected and the program is loaded.");
+    }
+
+    if (!publicKey) {
+      throw new Error("Wallet not connected. Please connect your wallet to create a market.");
+    }
 
     try {
       const marketPk = await createVerboseMarket(
@@ -241,7 +264,6 @@ export const CreateMarketModal = () => {
       <ModalOverlay backdropFilter="auto" backdropBlur="5px" />
       <Formik
         initialValues={{
-          program,
           title: "",
           category: "",
           lockTimestamp: "",
@@ -254,6 +276,21 @@ export const CreateMarketModal = () => {
         }}
         validationSchema={validationSchema}
         onSubmit={async (values, actions) => {
+          // Check program and wallet before proceeding
+          if (!programFromContext || !programFromContext.provider) {
+            actions.setStatus({
+              error: "Program not loaded. Please ensure your wallet is connected and wait a moment.",
+            });
+            return;
+          }
+
+          if (!publicKey) {
+            actions.setStatus({
+              error: "Wallet not connected. Please connect your wallet to create a market.",
+            });
+            return;
+          }
+
           try {
             await addMarket(values);
           } catch (error: any) {
